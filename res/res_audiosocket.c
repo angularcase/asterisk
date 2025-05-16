@@ -39,10 +39,14 @@
 #include "asterisk/module.h"
 #include "asterisk/uuid.h"
 #include "asterisk/format_cache.h"
+#include "asterisk/pbx.h"  /* For pbx_builtin_getvar_helper */
 
 #define	MODULE_DESCRIPTION	"AudioSocket support functions for Asterisk"
 
 #define MAX_CONNECT_TIMEOUT_MSEC 2000
+
+/* Global variable to store the selected format */
+static struct ast_format *selected_format = NULL;
 
 /*!
  * \internal
@@ -183,6 +187,8 @@ const int ast_audiosocket_init(const int svc, const char *id)
 	uuid_t uu;
 	int ret = 0;
 	uint8_t buf[3 + 16];
+	struct ast_channel *chan;
+	const char *forced_codec;
 
 	if (ast_strlen_zero(id)) {
 		ast_log(LOG_ERROR, "No UUID for AudioSocket\n");
@@ -193,6 +199,34 @@ const int ast_audiosocket_init(const int svc, const char *id)
 		ast_log(LOG_ERROR, "Failed to parse UUID '%s'\n", id);
 		return -1;
 	}
+
+	/* BEGIN: Codec selection based on FORCED_IN_CODEC variable */
+	chan = ast_channel_get_by_name_prefix("AudioSocket", strlen("AudioSocket"));
+	if (chan) {
+		ast_channel_lock(chan);
+		forced_codec = pbx_builtin_getvar_helper(chan, "FORCED_IN_CODEC");
+		if (!ast_strlen_zero(forced_codec)) {
+			if (strcasecmp(forced_codec, "slin16") == 0) {
+				selected_format = ast_format_slin;
+				ast_log(LOG_NOTICE, "AudioSocket: Using forced codec slin16\n");
+			} else if (strcasecmp(forced_codec, "slin24") == 0) {
+				selected_format = ast_format_slin24;
+				ast_log(LOG_NOTICE, "AudioSocket: Using forced codec slin24\n");
+			} else {
+				selected_format = ast_format_slin;
+				ast_log(LOG_NOTICE, "AudioSocket: Unknown forced codec '%s', using default slin16\n", forced_codec);
+			}
+		} else {
+			selected_format = ast_format_slin;
+			ast_log(LOG_NOTICE, "AudioSocket: No forced codec specified, using default slin16\n");
+		}
+		ast_channel_unlock(chan);
+		ast_channel_unref(chan);
+	} else {
+		selected_format = ast_format_slin;
+		ast_log(LOG_NOTICE, "AudioSocket: Could not find channel, using default slin16\n");
+	}
+	/* END: Codec selection based on FORCED_IN_CODEC variable */
 
 	buf[0] = AST_AUDIOSOCKET_KIND_UUID;
 	buf[1] = 0x00;
@@ -256,7 +290,7 @@ struct ast_frame *ast_audiosocket_receive_frame_with_hangup(const int svc,
 	int i = 0, n = 0, ret = 0;
 	struct ast_frame f = {
 		.frametype = AST_FRAME_VOICE,
-		.subclass.format = ast_format_slin,
+		.subclass.format = selected_format ? selected_format : ast_format_slin,
 		.src = "AudioSocket",
 		.mallocd = AST_MALLOCD_DATA,
 	};
