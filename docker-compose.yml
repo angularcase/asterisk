@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   asterisk:
-    image: asterisk-custom
+    image: angularcase/asterisk:latest
     container_name: asterisk
     # Montowanie plików konfiguracyjnych
     volumes:
