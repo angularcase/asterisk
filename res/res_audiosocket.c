@@ -206,8 +206,11 @@ const int ast_audiosocket_init(const int svc, const char *id)
 		ast_channel_lock(chan);
 		forced_codec = pbx_builtin_getvar_helper(chan, "FORCED_IN_CODEC");
 		if (!ast_strlen_zero(forced_codec)) {
-			if (strcasecmp(forced_codec, "slin16") == 0) {
+			if (strcasecmp(forced_codec, "slin") == 0) {
 				selected_format = ast_format_slin;
+				ast_log(LOG_NOTICE, "AudioSocket: Using forced codec slin\n");
+			} else if (strcasecmp(forced_codec, "slin16") == 0) {
+				selected_format = ast_format_slin16;
 				ast_log(LOG_NOTICE, "AudioSocket: Using forced codec slin16\n");
 			} else if (strcasecmp(forced_codec, "slin24") == 0) {
 				selected_format = ast_format_slin24;

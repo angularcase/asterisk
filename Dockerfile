@@ -36,6 +36,9 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
+# Create asterisk user
+RUN useradd -m -d /var/lib/asterisk -s /bin/bash asterisk
+
 # Clone Asterisk repository
 RUN git clone https://github.com/asterisk/asterisk.git /usr/src/asterisk
 
