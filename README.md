@@ -210,3 +210,61 @@ Asterisk is a trademark of Sangoma Technologies Corporation
 \[[Security](https://docs.asterisk.org/Deployment/Important-Security-Considerations/)\] 
 \[[Mailing List Archive](https://lists.digium.com)\] 
 
+# Asterisk Docker Setup
+
+## Struktura katalogów
+
+Przed uruchomieniem utwórz następującą strukturę katalogów:
+
+```
+.
+├── Dockerfile
+├── docker-compose.yml
+├── docker-entrypoint.sh
+└── data
+    ├── etc
+    │   ├── rtp.conf
+    │   ├── ari.conf
+    │   ├── http.conf
+    │   ├── pjsip.conf
+    │   ├── extensions.conf
+    │   └── musiconhold.conf
+    ├── logs
+    ├── sounds
+    └── spool
+```
+
+## Instalacja
+
+1. Zbuduj obraz:
+```bash
+docker build -t asterisk-custom .
+```
+
+2. Uruchom kontener:
+```bash
+docker-compose up -d
+```
+
+## Konfiguracja
+
+1. Upewnij się, że masz włączoną obsługę trybu sieci host w Docker Desktop (Windows)
+2. Sprawdź, czy wszystkie pliki konfiguracyjne są na miejscu w katalogu `data/etc/`
+3. Dostosuj zmienne środowiskowe w `docker-compose.yml` według potrzeb
+
+## Porty
+
+- 5060/udp - SIP
+- 5060/tcp - SIP
+- 8088/tcp - ARI
+- 8089/tcp - ARI
+- 11100-11199/udp - RTP
+
+## Uwagi
+
+- Kontener uruchamia się w trybie sieci host, co oznacza, że używa bezpośrednio interfejsów sieciowych hosta
+- Wszystkie pliki konfiguracyjne są montowane z katalogu `data/etc/`
+- Logi są zapisywane w katalogu `data/logs/`
+- Pliki dźwiękowe powinny być umieszczone w katalogu `data/sounds/`
+- Katalog `data/spool/` jest używany do przechowywania plików tymczasowych
+

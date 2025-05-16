@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  asterisk:
+    image: asterisk-custom
+    container_name: asterisk
+    # Montowanie plików konfiguracyjnych
+    volumes:
+      # Pliki konfiguracyjne
+      - ./data/etc/rtp.conf:/etc/asterisk/rtp.conf
+      - ./data/etc/ari.conf:/etc/asterisk/ari.conf
+      - ./data/etc/http.conf:/etc/asterisk/http.conf
+      - ./data/etc/pjsip.conf:/etc/asterisk/pjsip.conf
+      - ./data/etc/extensions.conf:/etc/asterisk/extensions.conf
+      - ./data/etc/musiconhold.conf:/etc/asterisk/musiconhold.conf
+      # Katalogi z danymi
+      - ./data/logs/:/var/log/asterisk
+      - ./data/sounds/:/var/lib/asterisk/sounds
+      - ./data/spool/:/var/spool/asterisk
+    # Zmienne środowiskowe
+    environment:
+      - ASTERISK_USER=root                    # Uruchom jako root (lub asterisk)
+      - CONTAINER_TIMEZONE=Europe/Warsaw      # Strefa czasowa
+      - SET_CONTAINER_TIMEZONE=true           # Włącz ustawianie strefy czasowej
+    # Zawsze restartuj kontener po awarii
+    restart: always
+    # Porty (zakomentowane, bo używamy network_mode: host)
+    # ports:
+    #    - 55060:55060/udp                    # SIP
+    #    - 11100-11199:11100-11199/udp        # RTP
+    #    - 8088:8088                          # ARI
+    # Tryb sieci host (wymaga włączenia w Docker Desktop na Windows)
+    network_mode: host
+    # Użyj skryptu wejściowego
+    command: ["/docker-entrypoint.sh"]
