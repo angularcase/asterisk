@@ -51,12 +51,6 @@ chmod -R 755 /etc/asterisk
 
 echo "[$(date)] Container initialization complete."
 
-# Check if Asterisk is installed
-if ! command -v asterisk &> /dev/null; then
-    echo "[$(date)] ERROR: Asterisk is not installed!"
-    exit 1
-fi
-
 # If no arguments were passed, run Asterisk in foreground mode
 if [ $# -eq 0 ]; then
     echo "[$(date)] No command provided, starting Asterisk in foreground mode..."

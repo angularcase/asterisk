@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   asterisk:
-    image: angularcase/asterisk:latest
+    image: asterisk-custom
     container_name: asterisk
     # Montowanie plików konfiguracyjnych
     volumes:
@@ -32,4 +32,4 @@ services:
     # Tryb sieci host (wymaga włączenia w Docker Desktop na Windows)
     network_mode: host
     # Użyj skryptu wejściowego
-    command: ["/docker-entrypoint.sh"] 
+    command: ["/docker-entrypoint.sh"]
