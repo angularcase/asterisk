@@ -5,4 +5,3 @@ docker login
 docker tag asterisk-custom angularcase/asterisk:latest
 
 docker push angularcase/asterisk:latest
-
