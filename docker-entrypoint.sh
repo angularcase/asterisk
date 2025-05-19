@@ -53,15 +53,8 @@ echo "[$(date)] Container initialization complete."
 
 # If no arguments were passed, run Asterisk in foreground mode
 if [ $# -eq 0 ]; then
-    echo "[$(date)] No command provided, starting Asterisk in foreground mode..."
-    # Check if Asterisk is already running
-    if pgrep asterisk > /dev/null; then
-        echo "[$(date)] Asterisk is already running, stopping it first..."
-        asterisk -rx "core stop now"
-        sleep 2
-    fi
-    echo "[$(date)] Starting Asterisk..."
-    exec asterisk -f
+    echo "[$(date)] Starting Asterisk in foreground mode..."
+    exec asterisk -f -vvv
 else
     # Execute the command passed to the script
     echo "[$(date)] Executing provided command: $@"

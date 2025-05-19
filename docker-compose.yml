@@ -32,4 +32,4 @@ services:
     # Tryb sieci host (wymaga włączenia w Docker Desktop na Windows)
     network_mode: host
     # Użyj skryptu wejściowego
-    command: ["/docker-entrypoint.sh"]
+    # command: ["/docker-entrypoint.sh"]

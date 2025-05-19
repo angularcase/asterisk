@@ -60,32 +60,11 @@ FROM debian:bullseye-slim
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
-    libedit2 \
-    libjansson4 \
-    libxml2 \
-    libsqlite3-0 \
-    libssl1.1 \
-    libsrtp2-1 \
-    libspandsp2 \
-    libspeex1 \
-    libspeexdsp1 \
-    libcurl4 \
-    libogg0 \
-    libvorbis0a \
-    libpq5 \
-    unixodbc \
-    libresample1 \
-    libpopt0 \
-    libgsm1 \
-    libopus0 \
-    libopusfile0 \
-    liblua5.2-0 \
-    libiksemel3 \
-    libsnmp40 \
-    libunbound8 \
-    libldap-2.4-2 \
-    libmariadb3 \
-    libhiredis0.14 \
+    libedit2 libjansson4 libxml2 libsqlite3-0 libssl1.1 \
+    libsrtp2-1 libspandsp2 libspeex1 libspeexdsp1 libcurl4 \
+    libogg0 libvorbis0a libpq5 unixodbc libresample1 libpopt0 \
+    libgsm1 libopus0 libopusfile0 liblua5.2-0 libiksemel3 \
+    libsnmp40 libunbound8 libldap-2.4-2 libmariadb3 libhiredis0.14 \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
@@ -124,4 +103,4 @@ ENV ASTERISK_USER=asterisk \
 RUN sed -i 's/^\[directories\]/\[directories\]\nrunuser = asterisk\nrungroup = asterisk/' /etc/asterisk/asterisk.conf
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["asterisk", "-f"] 
+CMD ["asterisk", "-f"]
