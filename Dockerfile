@@ -103,5 +103,5 @@ ENV ASTERISK_USER=asterisk \
 #RUN sed -i 's/^\[directories\]/\[directories\]\nrunuser = asterisk\nrungroup = asterisk/' /etc/asterisk/asterisk.conf
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-# CMD ["asterisk", "-f"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["asterisk", "-f"]
+# CMD ["tail", "-f", "/dev/null"]
