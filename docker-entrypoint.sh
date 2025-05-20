@@ -50,13 +50,7 @@ chmod -R 755 /var/run/asterisk
 chmod -R 755 /etc/asterisk
 
 echo "[$(date)] Container initialization complete."
+# echo "[$(date)] Ready for manual Asterisk start. Use: asterisk -f -U $ASTERISK_USER -G $ASTERISK_USER"
 
-# If no arguments were passed, run Asterisk in foreground mode
-if [ $# -eq 0 ]; then
-    echo "[$(date)] Starting Asterisk in foreground mode..."
-    exec asterisk -f -vvv
-else
-    # Execute the command passed to the script
-    echo "[$(date)] Executing provided command: $@"
-    exec "$@"
-fi 
+# Enter shell if no arguments are passed
+exec "$@"
