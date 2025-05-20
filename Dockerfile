@@ -100,7 +100,8 @@ ENV ASTERISK_USER=asterisk \
     SET_CONTAINER_TIMEZONE=false
 
 # Modify Asterisk to run in foreground by default
-RUN sed -i 's/^\[directories\]/\[directories\]\nrunuser = asterisk\nrungroup = asterisk/' /etc/asterisk/asterisk.conf
+#RUN sed -i 's/^\[directories\]/\[directories\]\nrunuser = asterisk\nrungroup = asterisk/' /etc/asterisk/asterisk.conf
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["asterisk", "-f"]
+# CMD ["asterisk", "-f"]
+CMD ["tail", "-f", "/dev/null"]

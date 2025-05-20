@@ -31,5 +31,4 @@ services:
     #    - 8088:8088                          # ARI
     # Tryb sieci host (wymaga włączenia w Docker Desktop na Windows)
     network_mode: host
-    # Użyj skryptu wejściowego
-    # command: ["/docker-entrypoint.sh"]
+    # command: removed to use CMD from Dockerfile
